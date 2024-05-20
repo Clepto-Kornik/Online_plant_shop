@@ -1,0 +1,73 @@
+{% include "header.html" %}
+<header
+  class="masthead"
+  style="background-image: url('../static/assets/img/main_image.jpg')"
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+          <h1>Twój profil</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+    <!-- User Profile Information -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Twoje dane</h2>
+        </div>
+        <div class="card-body">
+            <p>Nazwa użytkownika: {{ user.name }}</p>
+            <p>Email: {{ user.email }}</p>
+        </div>
+    </div>
+
+    <!-- User Order History -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Historia zamówień</h2>
+        </div>
+        <div class="card-body">
+            {% if orders %}
+                <ul class="list-group">
+                    {% for order in orders %}
+                        <li class="list-group-item">
+                            <p>Zamówienie #{{ order.id }} - Data: {{ order.date }}</p>
+                            <p>Szczegóły: {{ order.details }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Brak historii zamówień.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- User Posts -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Twoje posty</h2>
+        </div>
+        <div class="card-body">
+            {% if posts %}
+                <ul class="list-group">
+                    {% for post in posts %}
+                        <li class="list-group-item">
+                            <h3><a href="{{ url_for('show_post', post_id=post.id) }}">{{ post.title }}</a></h3>
+                            <p>{{ post.date }}</p>
+                            <p>{{ post.body[:200] }}...</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Brak postów.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}

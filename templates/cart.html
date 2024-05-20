@@ -1,0 +1,110 @@
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header class="masthead" style="background-image: url('{{ url_for('static', filename='assets/img/main_image.jpg') }}')">
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+          <h1>Twój koszyk</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+    <!-- Cart Items -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Produkty w koszyku</h2>
+        </div>
+        <div class="card-body">
+            {% if cart %}
+                <ul class="list-group">
+                    {% for item in cart %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ url_for('static', filename='assets/img/' ~ item.image) }}" alt="{{ item.name }}" class="img-thumbnail" width="100">
+                                <div class="ms-3">
+                                    <h5>{{ item.name }}</h5>
+                                    <p>Cena: {{ item.price }} PLN</p>
+                                    <p>Ilość: <input type="number" value="{{ item.quantity }}" min="1" max="100" data-id="{{ item.id }}" class="quantity-input"></p>
+                                </div>
+                            </div>
+
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Koszyk jest pusty.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Total Amount -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h4>Łączna kwota: {{ total_amount }} PLN</h4>
+        </div>
+    </div>
+
+    <!-- Payment Form -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Szczegóły płatności</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{{ url_for('view_cart') }}">
+                <div class="mb-3">
+                    <label for="cardNumber" class="form-label">Numer karty kredytowej</label>
+                    <input type="text" class="form-control" id="cardNumber" required>
+                </div>
+                <div class="mb-3">
+                    <label for="cardName" class="form-label">Imię i nazwisko na karcie</label>
+                    <input type="text" class="form-control" id="cardName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="cardExpiry" class="form-label">Data ważności</label>
+                    <input type="text" class="form-control" id="cardExpiry" placeholder="MM/YY" required>
+                </div>
+                <div class="mb-3">
+                    <label for="cardCVC" class="form-label">Kod CVC</label>
+                    <input type="text" class="form-control" id="cardCVC" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Potwierdź płatność i kup</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+
+        quantityInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                const productId = this.dataset.id;
+                const newQuantity = this.value;
+
+                fetch(`/update_cart/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ quantity: newQuantity }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error updating cart.');
+                    }
+                });
+            });
+        });
+    });
+</script>

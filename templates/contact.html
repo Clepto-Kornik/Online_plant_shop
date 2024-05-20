@@ -1,0 +1,89 @@
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header
+  class="masthead"
+  style="background-image: url('../static/assets/img/question.jpg')"
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+          {% if msg_sent: %}
+          <h1>Twoje pytanie zostało wysłane!</h1>
+          {% else: %}
+          <h1>Skontaktuj się z nami</h1>
+          {% endif %}
+          <span class="subheading">Masz pytanie? Napisz do nas.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- Main Content-->
+<main class="mb-4">
+  <div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <p>
+          Uzupełnij poniższy formularz.
+          Odezwiemy się tak szybko jak to możliwe!
+        </p>
+        <div class="my-5">
+          <!-- * * * * * * * * * * * * * * *-->
+          <!-- * * Simplified SB Contact Form for the Tutorial* *-->
+          <form
+            id="contactForm"
+            name="sentMessage"
+            action="{{ url_for('contact') }}"
+            method="post"
+          >
+            <div class="form-floating">
+              <input
+                class="form-control"
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Twoje imię..."
+                required
+              />
+              <label for="name">Imię</label>
+            </div>
+            <div class="form-floating">
+              <input
+                class="form-control"
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Twój email..."
+                required
+              />
+              <label for="email">Email</label>
+            </div>
+            <div class="form-floating">
+              <textarea
+                class="form-control"
+                id="message"
+                name="message"
+                placeholder="Twoje pytanie..."
+                required
+                style="height: 12rem"
+              ></textarea>
+              <label for="message">Treść wiadomości</label>
+            </div>
+            <br />
+            <button
+              class="btn btn-danger text-uppercase"
+              id="submitButton"
+              type="submit"
+            >
+              WYŚLIJ
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% include "footer.html" %}
